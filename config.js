@@ -6,4 +6,6 @@ function convertToBool(text, fault = 'true') {
 }
 module.exports = {
 SESSION_ID: process.env.SESSION_ID,
+ALIVE_IMG: process.env.ALIVE_IMG || "https://telegra.ph/file/600fb1c5551ef67e24d76.jpg",
+ALIVE_MSG: process.env.ALIVE_MSG || "hey i am alive, i am dizer multidevice whatsapp bot",
 };
