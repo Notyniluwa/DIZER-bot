@@ -34,7 +34,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
             ptt: false
         }, { quoted: mek });
 
-        reply(`*🎵 Here is your song:*\n\n${desc}`);
+        reply(`*🎵 Here is your song:*\n\n${desc}\n\n*💡 Powered by Dizer MD*`);
     } catch (e) {
         console.error(e);
         reply(`*⚠️ An error occurred:* ${e.message}`);
