@@ -11,26 +11,24 @@ async(conn, mek, m, {
     from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply
 }) => {
     try {
-        // Define the menu structure with emojis
+    const config = await readEnv();    
+        // Define the initial menu structure with categories
         let menu = {
-            main: `
-*🌟 Main Commands:*
-1. 🌟 *!start* - Start the bot
-2. ℹ️ *!help* - Get help with commands
-3. 📝 *!info* - Get bot information
-            `,
-            download: `
-*📥 Download Commands:*
-1. 🎥 *!yt [link]* - Download YouTube video
-2. 📺 *!fb [link]* - Download Facebook video
-            `,
-            group: `
-*👥 Group Commands:*
-1. ➕ *!add [number]* - Add member to group
-2. ➖ *!kick [number]* - Remove member from group
-3. 🆙 *!promote [number]* - Promote member to admin
-4. ⬇️ *!demote [number]* - Demote admin to member
-            `
+            main: `*🌟 Main Commands:*\n`,
+            download: `*📥 Download Commands:*\n`,
+            group: `*👥 Group Commands:*\n`,
+            others: `*🔧 Other Commands:*\n`
+        };
+
+        // Iterate over all commands and add them to the appropriate category
+        for (let i = 0; i < commands.length; i++) {
+            if (commands[i].pattern && !commands[i].dontAddCommandList) {
+                if (menu[commands[i].category]) {
+                    menu[commands[i].category] += `• ${commands[i].pattern}\n`;
+                } else {
+                    menu['others'] += `${config.PREFIX}${commands[i].pattern}\n`; // Default to 'others' category if not categorized
+                }
+            }
         }
 
         // Combine the menu sections
@@ -42,6 +40,7 @@ async(conn, mek, m, {
 ${menu.main}
 ${menu.download}
 ${menu.group}
+${menu.others}
 
 Type the relevant command to use.
         `;
