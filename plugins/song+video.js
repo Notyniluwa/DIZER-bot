@@ -40,3 +40,42 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
         reply(`*⚠️ An error occurred:* ${e.message}`);
     }
 });
+
+cmd({
+    pattern: "video",
+    desc: "Download videos",
+    category: "download",
+    filename: __filename
+},
+async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
+    try {
+        if (!q) return reply("*❌ Please provide a video name to search.*");
+
+        const search = await yts(q);
+        if (!search.videos.length) return reply("*🚫 Sorry, I couldn't find the video.*");
+
+        const data = search.videos[0];
+        const url = data.url;
+
+        // Download the video using api-dylux or another downloader
+        const video = await fg.downloader.ytv(url); // Assuming `ytv` is the method for video download
+        const { title, dl_link } = video;
+
+        let desc = `🎬 *Video Details:*\n\n` +
+                   `*📌 Title:* ${title}\n` +
+                   `*⏱ Duration:* ${data.timestamp}\n` +
+                   `*👁 Views:* ${data.views.toLocaleString()}\n` +
+                   `*🔗 YouTube Link:* ${url}`;
+
+        await conn.sendMessage(from, {
+            video: { url: dl_link },
+            mimetype: 'video/mp4',
+            ptt: false
+        }, { quoted: mek });
+
+        reply(`*🎥 Here is your video:*\n\n${desc}\n\n*💡 Powered by Dizer MD*`);
+    } catch (e) {
+        console.error(e);
+        reply(`*⚠️ An error occurred:* ${e.message}`);
+    }
+});
